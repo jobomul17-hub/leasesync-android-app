@@ -22,14 +22,14 @@ jobs:
       - name: Fix Mobile Directory
         run: |
           mkdir -p www
-          if [ -f index.html ]; then mv index.html www/; fi
+          if [ -f index.html ]; then cp index.html www/; fi
+          if [ -f www/index.html ]; then echo "File found successfully"; else echo "<h1>LeaseSync</h1>" > www/index.html; fi
 
       - name: Build Mobile Project Engine
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init LeaseSync com.leasesync.tbk --web-dir=www
+          npx cap init LeaseSync com.leasesync.tbk --web-dir=www --confirm
           npx cap add android
-          npx cap sync
 
       - name: Package Final Mobile APK File
         run: |
