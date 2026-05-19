@@ -8,41 +8,21 @@ jobs:
       - name: Get Code Files
         uses: actions/checkout@v4
 
-      - name: Configure Web Runtime Environment
+      - name: Setup Web Runtime Environment
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Configure Android SDK Tools
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Setup Android Home Environment
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Fix Mobile Directory
+      - name: Create Web Distribution Folder
         run: |
           mkdir -p www
           if [ -f index.html ]; then cp index.html www/; fi
-          if [ -f www/index.html ]; then echo "File found successfully"; else echo "<h1>LeaseSync</h1>" > www/index.html; fi
+          if [ -f www/index.html ]; then echo "File verified"; else echo "<h1>LeaseSync</h1>" > www/index.html; fi
 
-      - name: Build Mobile Project Engine
-        run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init LeaseSync com.leasesync.tbk --web-dir=www
-          npx cap add android
-
-      - name: Package Final Mobile APK File
-        run: |
-          cd android && ./gradlew assembleDebug
-
-      - name: Deliver Finished APK Link
-        uses: actions/upload-artifact@v4
+      - name: Build Android Package Installer
+        uses: ionic-team/appflow-build-action@v1
         with:
-          name: LeaseSync-App-Package
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          platform: android
+          build-type: debug
+          web-dir: www
           
