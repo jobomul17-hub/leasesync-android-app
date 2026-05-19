@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '11'
+          java-version: '17'
 
       - name: Fix Mobile Directory
         run: |
@@ -28,7 +28,7 @@ jobs:
       - name: Build Mobile Project Engine
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init LeaseSync com.leasesync.tbk --web-dir=www --confirm
+          npx cap init LeaseSync com.leasesync.tbk --web-dir=www
           npx cap add android
 
       - name: Package Final Mobile APK File
