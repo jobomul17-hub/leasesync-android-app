@@ -1,0 +1,43 @@
+name: Compile Free Android APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code Files
+        uses: actions/checkout@v3
+
+      - name: Configure Web Runtime Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Configure Android SDK Tools
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Fix Mobile Directory
+        run: |
+          mkdir -p www
+          if [ -f index.html ]; then mv index.html www/; fi
+
+      - name: Build Mobile Project Engine
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init LeaseSync com.leasesync.tbk --web-dir=www
+          npx cap add android
+          npx cap sync
+
+      - name: Package Final Mobile APK File
+        run: |
+          cd android && ./gradlew assembleDebug
+
+      - name: Deliver Finished APK Link
+        uses: actions/upload-artifact@v3
+        with:
+          name: LeaseSync-App-Package
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          
