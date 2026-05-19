@@ -19,6 +19,11 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Setup Android Home Environment
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
       - name: Fix Mobile Directory
         run: |
           mkdir -p www
