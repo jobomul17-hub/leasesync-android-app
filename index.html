@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<head>
+    <meta charset=”UTF-8”>
+    <meta name=”viewport” content=”width=device-width, initial-scale=1.0”>
+    <title>LeaseSync App</title>
+    <style>
+{
+Box-sizing: border-box;
+            Margin: 0;
+            Padding: 0;
+            Font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-serif;
+        }
+
+        Body {
+            Background-color: #050512;
+            Min-height: 100vh;
+        }
+
+        /* ---------------------------------------------------- */
+        /* SCREEN 1: SECURE ACCESS HOME SCREEN                  */
+        /* ---------------------------------------------------- */
+        #home-screen {
+            Background: linear-gradient(180deg, #0e0d26 0%, #050512 100%);
+            Min-height: 100vh;
+            Display: flex;
+            Justify-content: center;
+            Align-items: center;
+            Padding: 20px;
+            Position: relative;
+        }
+
+        .container {
+            Width: 100%;
+            Max-width: 450px;
+            Text-align: center;
+        }
+
+        .logo-circle {
+            Width: 56px;
+            Height: 56px;
+            Background-color: #6366f1;
+            Border-radius: 50%;
+            Display: flex;
+            Align-items: center;
+            Justify-content: center;
+            Font-weight: bold;
+            Font-size: 18px;
+            Margin: 0 auto 24px auto;
+            Color: #fff;
+        }
+
+        H1 {
+            Font-size: 28px;
+            Font-weight: 700;
+            Margin-bottom: 8px;
+            Letter-spacing: -0.5px;
+            Color: #ffffff;
+        }
+
+        .subtitle {
+            Font-size: 14px;
+            Color: #9ca3af;
+            Margin-bottom: 40px;
+        }
+
+        .portal-grid {
+            Display: grid;
+            Grid-template-columns: 1fr 1fr;
+            Gap: 16px;
+        }
+
+        .card {
+            Background-color: #ffffff;
+            Border-radius: 16px;
+            Padding: 20px;
+            Text-align: left;
+            Display: flex;
+            Flex-direction: column;
+            Height: 180px;
+            Cursor: pointer;
+            Transition: transform 0.2s;
+        }
+
+        .card:active { transform: scale(0.97); }
+        .icon { font-size: 24px; margin-bottom: auto; }
+        .icon-agent { color: #a855f7; }
+        .icon-tenant { color: #0d9488; }
+        .card-title { color: #0f172a; font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .card-desc { color: #64748b; font-size: 11px; line-height: 1.4; }
+
+        /* Developed by TBK Styling */
+        .developer-credit {
+            Font-size: 12px;
+            Color: #64748b;
+            Letter-spacing: 0.5px;
+            Margin-top: 40px;
+        }
+        
+        .developer-credit-dark {
+            Font-size: 11px;
+            Color: #94a3b8;
+            Margin-top: 24px;
+            Text-align: center;
+        }
+
+        /* ---------------------------------------------------- */
+        /* SHARED LOGIN TEMPLATE LAYOUTS                        */
+        /* ---------------------------------------------------- */
+        .login-view {
+            Display: none;
+            Background-color: #f8fafc;
+            Min-height: 100vh;
+            Color: #0f172a;
+            Padding: 24px;
+        }
+
+        .login-container {
+            Max-width: 400px;
+            Margin: 40px auto 0 auto;
+            Background: white;
+            Padding: 32px 24px;
+            Border-radius: 20px;
+            Border: 1px solid #e2e8f0;
+            Box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            Display: flex;
+            Flex-direction: column;
+        }
+
+        .login-header { text-align: center; margin-bottom: 24px; }
+        .login-header h2 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+        .login-header p { font-size: 13px; color: #64748b; }
+
+        .input-group { margin-bottom: 16px; text-align: left; }
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
+        .input-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; color: #0f172a; background-color: #f8fafc; }
+        .input-group input:focus { outline: 2px solid #6366f1; border-color: transparent; }
+
+        .btn-submit { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; color: white; cursor: pointer; margin-top: 8px; }
+        .bg-purple-btn { background-color: #a855f7; }
+        .bg-teal-btn { background-color: #0d9488; }
+        .login-back { display: inline-block; margin-top: 20px; font-size: 13px; color: #64748b; text-decoration: none; cursor: pointer; }
+
+        /* ---------------------------------------------------- */
+        /* SHARED DASHBOARD NAVIGATION                          */
+        /* ---------------------------------------------------- */
+        .navbar {
+            Background-color: #ffffff;
+            Padding: 12px 16px;
+            Display: flex;
+            Align-items: center;
+            Justify-content: space-between;
+            Border-bottom: 1px solid #e2e8f0;
+            Position: sticky;
+            Top: 0;
+            z-index: 100;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 12px; font-weight: bold; font-size: 16px; color: #0f172a; }
+        .back-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #0f172a; }
+        .search-bar { background-color: #f1f5f9; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; width: 150px; }
+        .main-content { padding: 16px; display: flex; flex-direction: column; gap: 16px; max-width: 450px; margin: 0 auto; }
+
+        /* ---------------------------------------------------- */
+        /* DASHBOARD 1: AGENT PORTAL                            */
+        /* ---------------------------------------------------- */
+        #agent-dashboard { display: none; background-color: #f8fafc; min-height: 100vh; }
+        .welcome-section { display: flex; justify-content: space-between; align-items: center; }
+        .welcome-text h2 { font-size: 18px; font-weight: 700; color: #0f172a; }
+        .welcome-text p { font-size: 12px; color: #64748b; }
+        .avatar-box { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; color: white; }
+        .bg-green { background-color: #00e676; }
+        .bg-blue { background-color: #2979ff; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .stat-box { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; }
+        .stat-box.bordered-purple { border-top: 4px solid #a855f7; }
+        .stat-box.bordered-pink { border-top: 4px solid #ec4899; }
+        .stat-label { font-size: 11px; color: #64748b; margin-bottom: 6px; text-transform: uppercase; font-weight: 600; }
+        .stat-value { font-size: 20px; font-weight: 700; color: #0f172a; }
+
+        .section-title { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .actions-row { display: flex; gap: 8px; }
+        .btn-action { background-color: #f1f5f9; border: none; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; color: #334155; }
+        .btn-action.primary { background-color: #eedffc; color: #a855f7; }
+
+        .panel { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .panel-title { font-size: 14px; font-weight: 700; color: #0f172a; }
+        .live-tag { font-size: 10px; color: #6366f1; font-weight: 700; }
+
+        .property-item { display: flex; align-items: center; gap: 12px; }
+        .property-img { width: 44px; height: 44px; background-color: #e2e8f0; border-radius: 8px; font-size: 20px; display: flex; align-items: center; justify-content: center; }
+        .property-info { flex-grow: 1; }
+        .prop-name { font-size: 13px; font-weight: 600; color: #0f172a; }
+        .prop-type { font-size: 11px; color: #64748b; }
+        .property-meta { text-align: right; }
+        .prop-price { font-size: 13px; font-weight: 700; color: #0f172a; }
+        .prop-status { font-size: 10px; color: #22c55e; font-weight: 600; }
+
+        .donut-ring { width: 100px; height: 100px; border: 10px solid #f1f5f9; border-top: 10px solid #6366f1; border-radius: 50%; margin: 10px auto; }
+        .chart-legend { display: flex; justify-content: space-around; width: 100%; margin-top: 16px; }
+
+        /* ---------------------------------------------------- */
+        /* DASHBOARD 2: TENANT PORTAL                           */
+        /* ---------------------------------------------------- */
+        #tenant-dashboard { display: none; background-color: #f8fafc; min-height: 100vh; color: #0f172a; }
+        
+        .notice-btn { background-color: #fef2f2; border: 1px solid #fee2e2; color: #ef4444; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .stat-subtext { display: flex; justify-content: space-between; font-size: 11px; margin-top: 12px; color: #64748b; border-top: 1px dashed #e2e8f0; padding-top: 8px; }
+        .text-green { color: #22c55e; font-weight: 600; }
+
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
+        .info-row:last-child { margin-bottom: 0; }
+        .info-lbl { color: #64748b; }
+        .info-val { font-weight: 600; color: #0f172a; }
+        .badge-active { background-color: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; }
+        
+        .agency-block { display: flex; gap: 12px; align-items: center; margin-top: 4px; }
+        .agency-details { display: flex; flex-direction: column; }
+        .agency-name { font-size: 13px; font-weight: 700; }
+        .agency-email { font-size: 11px; color: #64748b; }
+
+        .marketplace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .market-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+        .market-img-holder { height: 110px; background-size: cover; background-position: center; position: relative; }
+        .market-tag { position: absolute; top: 8px; left: 8px; background-color: #2563eb; color: white; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .market-body { padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+        .market-price-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; }
+        .market-dep { font-size: 10px; color: #0d9488; }
+        .market-title { font-size: 13px; font-weight: 700; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .market-loc { font-size: 10px; color: #64748b; }
+        .market-specs { font-size: 9px; color: #94a3b8; font-weight: 600; text-transform: uppercase; display: flex; gap: 6px; margin-top: 2px; }
+        
+        .btn-booking { background-color: #0f172a; color: white; border: none; width: 100%; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+    <!-- ==================================================== 
+    <!—SCREEN 1: ACCESS HUB SELECTOR                        
+    <!-- ==================================================== 
+    <div id=”home-screen”>
+        <div class=”container”>
+            <div class=”logo-circle”>LS</div>
+            <h1>Secure Access Portal</h1>
+            <p class=”subtitle”>Select your role to access the management deck</p>
+
+            <div class=”portal-grid”>
+                <div class=”card” onclick=”switchView(‘agent-login’)”>
+                    <div class=”icon icon-agent”>💼</div>
+                    <div class=”card-title”>Agent Portal</div>
+                    <div class=”card-desc”>Manage your specific agency’s properties, tenants, and collections.</div>
+                </div>
+
+                <div class=”card” onclick=”switchView(‘tenant-login’)”>
+                    <div class=”icon icon-tenant”>👤</div>
+                    <div class=”card-title”>Tenant Portal</div>
+                    <div class=”card-desc”>View your rent status, download receipts, and manage your lease.</div>
+                </div>
+            </div>
+
+            <!—Developer Attribution Added Here 
+            <div class=”developer-credit”>Developed by TBK</div>
+        </div>
+    </div>
+
+    <!-- ==================================================== 
+    <!—NEW SCREEN: AGENT LOGIN                              
+    <!-- ==================================================== 
+    <div id=”agent-login” class=”login-view”>
+        <div class=”login-container”>
+            <div class=”login-header”>
+                <h2>Agent Console</h2>
+                <p>Enter your credentials to access agency features</p>
+            </div>
+            <form onsubmit=”handleLogin(event, ‘agent-dashboard’)”>
+                <div class=”input-group”>
+                    <label>Agency Email</label>
+                    <input type=”email” placeholder=agency@lease-sync.com required value=management@urbannest.co.ke>
+                </div>
+                <div class=”input-group”>
+                    <label>Password</label>
+                    <input type=”password” placeholder=”••••••••” required value=”password123”>
+                </div>
+                <button type=”submit” class=”btn-submit bg-purple-btn”>Secure Login</button>
+            </form>
+            <center><span class=”login-back” onclick=”switchView(‘home-screen’)”>← Cancel and Go Back</span></center>
+            
+            <!—Developer Attribution inside Agent Form 
+            <div class=”developer-credit-dark”>Developed by TBK</div>
+        </div>
+    </div>
+
+    <!-- ==================================================== 
+    <!—NEW SCREEN: TENANT LOGIN                             
+    <!-- ==================================================== 
+    <div id=”tenant-login” class=”login-view”>
+        <div class=”login-container”>
+            <div class=”login-header”>
+                <h2>Tenant Portal</h2>
+                <p>Sign in to review your lease arrangements</p>
+            </div>
+            <form onsubmit=”handleLogin(event, ‘tenant-dashboard’)”>
+                <div class=”input-group”>
+                    <label>Tenant ID / Email</label>
+                    <input type=”email” placeholder=tenant@example.com required value=john.doe@retailers.com>
+                </div>
+                <div class=”input-group”>
+                    <label>Password</label>
+                    <input type=”password” placeholder=”••••••••” required value=”password123”>
+                </div>
+                <button type=”submit” class=”btn-submit bg-teal-btn”>Access Dashboard</button>
+            </form>
+            <center><span class=”login-back” onclick=”switchView(‘home-screen’)”>← Cancel and Go Back</span></center>
+            
+            <!—Developer Attribution inside Tenant Form 
+            <div class=”developer-credit-dark”>Developed by TBK</div>
+        </div>
+    </div>
+
+
+    <!-- ==================================================== 
+    <!—SCREEN 4: REAL ESTATE AGENT PORTAL                   
+    <!-- ==================================================== 
+    <div id=”agent-dashboard” style=”display:none;”>
+        <div class=”navbar”>
+            <div class=”nav-left”>
+                <button class=”back-btn” onclick=”switchView(‘home-screen’)”>← Logout</button>
+                <span>LeaseSync</span>
+            </div>
+            <input type=”text” class=”search-bar” placeholder=”🔍 Search properties...”>
+        </div>
+
+        <div class=”main-content”>
+            <div class=”welcome-section”>
+                <div class=”welcome-text”>
+                    <h2>Welcome back, Urban Nest Agencies</h2>
+                    <p>Overview of your agency’s real estate portfolio.</p>
+                </div>
+                <div class=”avatar-box bg-green”>UR</div>
+            </div>
+
+            <div class=”stats-grid”>
+                <div class=”stat-box”><div class=”stat-label”>Total Properties</div><div class=”stat-value”>1</div></div>
+                <div class=”stat-box”><div class=”stat-label”>Active Tenants</div><div class=”stat-value”>0</div></div>
+                <div class=”stat-box”><div class=”stat-label”>Notice Given</div><div class=”stat-value”>0</div></div>
+                <div class=”stat-box”><div class=”stat-label”>Revenue (Mo)</div><div class=”stat-value”>KSh 0</div></div>
+            </div>
+
+            <div class=”section-title”>Quick Actions</div>
+            <div class=”actions-row”>
+                <button class=”btn-action primary” onclick=”alert(‘Open Add Property Form’)”>➕ Add Property</button>
+                <button class=”btn-action” onclick=”alert(‘Open Add Tenant Form’)”>👤 Add Tenant</button>
+            </div>
+
+            <div class=”panel”>
+                <div class=”panel-header”>
+                    <span class=”panel-title”>Properties Management</span>
+                    <span class=”live-tag”>● LIVE</span>
+                </div>
+                <div class=”property-item”>
+                    <div class=”property-img”>🏢</div>
+                    <div class=”property-info”>
+                        <div class=”prop-name”>Mnarani Heights Apt...</div>
+                        <div class=”prop-type”>Apartment</div>
+                    </div>
+                    <div class=”property-meta”>
+                        <div class=”prop-price”>KSh 25,000</div>
+                        <div class=”prop-status”>Available</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=”panel”>
+                <div class=”panel-header”><span class=”panel-title”>Portfolio Distribution</span></div>
+                <div class=”donut-ring”></div>
+                <div class=”chart-legend”>
+                    <div class=”legend-item”><div class=”stat-label”>Active</div><div class=”stat-value” style=”font-size:14px; text-align:center”>0</div></div>
+                    <div class=”legend-item”><div class=”stat-label”>Vacant</div><div class=”stat-value” style=”font-size:14px; text-align:center”>1</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================================================== 
+    <!—SCREEN 5: CONSUMER TENANT DASHBOARD                  
+    <!-- ==================================================== 
+    <div id=”tenant-dashboard” style=”display:none;”>
+        <div class=”navbar”>
+            <div class=”nav-left”>
+                <button class=”back-btn” onclick=”switchView(‘home-screen’)”>← Logout</button>
+                <span>LeaseSync</span>
+            </div>
+            <input type=”text” class=”search-bar” placeholder=”🔍 Search properties...”>
+        </div>
+
+        <div class=”main-content”>
+            <div class=”welcome-section”>
+                <div class=”welcome-text”>
+                    <h2>Hello, John Doe Retailers</h2>
+                    <p style=”font-size: 12px; color:#64748b;”>Your lease for Downtown Retail Space</p>
+                </div>
+                <button class=”notice-btn” onclick=”alert(‘Termination Notice Request Sent’)”>🛑 Give Termination Notice</button>
+            </div>
+
+            <div class=”stats-grid”>
+                <div class=”s
